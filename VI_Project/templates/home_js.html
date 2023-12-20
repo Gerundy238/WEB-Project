@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Component Cost Calculator</title>
+</head>
+<body>
+    <h1>Component Cost Calculator</h1>
+    <label>Power Supply Cost:</label>
+    <input type="number" id="power_supply" required><br>
+
+    <label>Motherboard Cost:</label>
+    <input type="number" id="motherboard" required><br>
+
+    <label>GPU Cost:</label>
+    <input type="number" id="gpu" required><br>
+
+    <label>CPU Cost:</label>
+    <input type="number" id="cpu" required><br>
+
+    <label>RAM Cost:</label>
+    <input type="number" id="ram" required><br>
+
+    <label>Storage Cost:</label>
+    <input type="number" id="storage" required><br>
+
+    <button type="button" onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+
+    <script>
+        async function calculate() {
+            const powerSupply = parseFloat(document.getElementById("power_supply").value);
+            const motherboard = parseFloat(document.getElementById("motherboard").value);
+            const gpu = parseFloat(document.getElementById("gpu").value);
+            const cpu = parseFloat(document.getElementById("cpu").value);
+            const ram = parseFloat(document.getElementById("ram").value);
+            const storage = parseFloat(document.getElementById("storage").value);
+
+            const response = await fetch("/calculate/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    power_supply: powerSupply,
+                    motherboard: motherboard,
+                    gpu: gpu,
+                    cpu: cpu,
+                    ram: ram,
+                    storage: storage
+                })
+            });
+
+            const result = await response.json();
+            document.getElementById("result").innerText = `Total Cost (RUB): ₽${result.total_cost_rub.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
